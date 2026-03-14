@@ -1,0 +1,23 @@
+# Claude
+.claude/
+
+# Build
+build/
+*.o
+*.a
+*.so
+
+# Binaries
+*/bin/
+*.out
+
+# Profiling
+*.nsys-rep
+*.ncu-rep
+*.nvvp
+*.qdrep
+
+# IDE
+.vscode/
+*.swp
+*.swo

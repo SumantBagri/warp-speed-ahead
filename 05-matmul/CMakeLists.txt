@@ -1,0 +1,5 @@
+add_executable(gemm_naive       gemm_naive.cu)
+add_executable(gemm_tiled       gemm_tiled.cu)
+add_executable(gemm_vectorized  gemm_vectorized.cu)
+add_executable(gemm_cublas      gemm_cublas.cu)
+target_link_libraries(gemm_cublas cublas)
