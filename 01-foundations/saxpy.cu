@@ -19,7 +19,6 @@
 
 #include <cstdio>
 #include <cstdlib>
-
 #include <vector>
 
 #include "../common/cuda_utils.h"
@@ -47,10 +46,11 @@ int main() {
     for (int i = 0; i < N; i++) {
         h_x[i] = i;
         h_y[i] = i;
-        h_ref[i] = A * h_x[i] + h_y[i];
+        h_ref[i] = std::fmaf(A, h_x[i], h_y[i]);
     }
 
-    float* d_x; float* d_y;
+    float* d_x;
+    float* d_y;
     CUDA_CHECK(cudaMalloc(&d_x, bytes));
     CUDA_CHECK(cudaMalloc(&d_y, bytes));
 
