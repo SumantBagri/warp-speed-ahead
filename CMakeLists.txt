@@ -8,9 +8,8 @@ set(CMAKE_CXX_STANDARD 17)
 # To auto-detect: set(CMAKE_CUDA_ARCHITECTURES native)
 set(CMAKE_CUDA_ARCHITECTURES 86)
 
-set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -lineinfo")
 set(CMAKE_CUDA_FLAGS_DEBUG "-G -g")
-set(CMAKE_CUDA_FLAGS_RELEASE "-O3 --use_fast_math")
+set(CMAKE_CUDA_FLAGS_RELEASE "-O3 --use_fast_math -lineinfo")
 
 # Shared header path
 include_directories(${CMAKE_SOURCE_DIR}/common)
