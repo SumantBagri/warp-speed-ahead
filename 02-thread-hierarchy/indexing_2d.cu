@@ -23,8 +23,10 @@
 // Build:  cmake --build build --target indexing_2d
 // Run:    ./build/02-thread-hierarchy/indexing_2d
 
-#include <cstdio>
 #include <cuda_runtime.h>
+
+#include <cstdio>
+
 #include "../common/cuda_utils.h"
 
 // TODO: implement a kernel that writes (row * 1000 + col) into each element

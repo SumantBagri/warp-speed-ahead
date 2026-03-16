@@ -37,8 +37,10 @@
 // Build:  cmake --build build --target occupancy_tuning
 // Run:    ./build/04-memory-optimization/occupancy_tuning
 
-#include <cstdio>
 #include <cuda_runtime.h>
+
+#include <cstdio>
+
 #include "../common/cuda_utils.h"
 
 // TODO: implement the bandwidth-bound copy kernel for Exercise A

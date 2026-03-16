@@ -27,9 +27,11 @@
 //   independent tasks (e.g., per-task vector scaling with different lengths).
 //   Compare to a standard one-kernel-per-task approach.
 
+#include <cuda_runtime.h>
+
 #include <cstdio>
 #include <cstdlib>
-#include <cuda_runtime.h>
+
 #include "../common/cuda_utils.h"
 
 // TODO: define a Task struct

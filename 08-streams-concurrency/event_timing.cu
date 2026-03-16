@@ -30,9 +30,11 @@
 // Build:  cmake --build build --target event_timing
 // Run:    ./build/08-streams-concurrency/event_timing
 
+#include <cuda_runtime.h>
+
 #include <cstdio>
 #include <cstdlib>
-#include <cuda_runtime.h>
+
 #include "../common/cuda_utils.h"
 
 // TODO: implement exercises A, B, C

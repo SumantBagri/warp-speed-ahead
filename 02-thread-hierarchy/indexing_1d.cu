@@ -17,8 +17,10 @@
 // Build:  cmake --build build --target indexing_1d
 // Run:    ./build/02-thread-hierarchy/indexing_1d
 
-#include <cstdio>
 #include <cuda_runtime.h>
+
+#include <cstdio>
+
 #include "../common/cuda_utils.h"
 
 struct ThreadInfo {

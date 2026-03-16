@@ -25,9 +25,11 @@
 //     Version B: capture into graph, launch graph 1000 times
 //   At ~5 µs/launch: Version A ≈ 50 ms overhead; Version B ≈ 1 ms overhead.
 
+#include <cuda_runtime.h>
+
 #include <cstdio>
 #include <cstdlib>
-#include <cuda_runtime.h>
+
 #include "../common/cuda_utils.h"
 
 // TODO: implement a simple kernel (vector scale)

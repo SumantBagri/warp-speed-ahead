@@ -27,9 +27,11 @@
 // Build:  cmake --build build --target reduce_optimized
 // Run:    ./build/06-reductions/reduce_optimized
 
+#include <cuda_runtime.h>
+
 #include <cstdio>
 #include <cstdlib>
-#include <cuda_runtime.h>
+
 #include "../common/cuda_utils.h"
 
 // TODO: implement reduce_sequential kernel (no divergence version)

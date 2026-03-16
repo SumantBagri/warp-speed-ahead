@@ -40,10 +40,12 @@
 // Build:  cmake --build build --target nvtx_annotated
 // Run:    nsys profile ./build/09-profiling/nvtx_annotated
 
-#include <cstdio>
-#include <cstdlib>
 #include <cuda_runtime.h>
 #include <nvtx3/nvToolsExt.h>
+
+#include <cstdio>
+#include <cstdlib>
+
 #include "../common/cuda_utils.h"
 
 // TODO: copy your gemm_tiled or reduce_warp kernel here

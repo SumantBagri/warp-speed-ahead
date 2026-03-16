@@ -26,9 +26,11 @@
 // Build:  cmake --build build --target gemm_naive
 // Run:    ./build/05-matmul/gemm_naive
 
+#include <cuda_runtime.h>
+
 #include <cstdio>
 #include <cstdlib>
-#include <cuda_runtime.h>
+
 #include "../common/cuda_utils.h"
 
 // TODO: implement gemm_naive kernel

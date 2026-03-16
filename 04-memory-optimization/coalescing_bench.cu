@@ -26,9 +26,11 @@
 // Build:  cmake --build build --target coalescing_bench
 // Run:    ./build/04-memory-optimization/coalescing_bench
 
+#include <cuda_runtime.h>
+
 #include <cstdio>
 #include <cstdlib>
-#include <cuda_runtime.h>
+
 #include "../common/cuda_utils.h"
 
 // TODO: write kernels for each stride (or a templated kernel with stride as template param)

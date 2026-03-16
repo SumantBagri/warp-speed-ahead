@@ -28,9 +28,11 @@
 // Build:  cmake --build build --target warp_vote
 // Run:    ./build/07-warp-programming/warp_vote
 
+#include <cuda_runtime.h>
+
 #include <cstdio>
 #include <cstdlib>
-#include <cuda_runtime.h>
+
 #include "../common/cuda_utils.h"
 
 // TODO: implement kernels for exercises A, B, C

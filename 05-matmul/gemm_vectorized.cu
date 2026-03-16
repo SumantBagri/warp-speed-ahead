@@ -26,14 +26,16 @@
 // Build:  cmake --build build --target gemm_vectorized
 // Run:    ./build/05-matmul/gemm_vectorized
 
+#include <cuda_runtime.h>
+
 #include <cstdio>
 #include <cstdlib>
-#include <cuda_runtime.h>
+
 #include "../common/cuda_utils.h"
 
 #define TILE 64
-#define WI   4    // register tile height per thread
-#define WJ   4    // register tile width per thread
+#define WI 4  // register tile height per thread
+#define WJ 4  // register tile width per thread
 
 // TODO: implement gemm with float4 loads and register tiling
 // This is the hardest kernel so far — sketch the indexing on paper first

@@ -42,13 +42,15 @@
 //   Verify against standard (naive) attention.
 //   Then profile both with Nsight Compute and compare HBM traffic.
 
+#include <cuda_runtime.h>
+
+#include <cmath>
 #include <cstdio>
 #include <cstdlib>
-#include <cmath>
-#include <cuda_runtime.h>
+
 #include "../common/cuda_utils.h"
 
-#define HEAD_DIM 64   // d_k — dimension of Q, K, V vectors
+#define HEAD_DIM 64  // d_k — dimension of Q, K, V vectors
 
 // TODO: implement naive_attention (materialise full N×N score matrix)
 // TODO: implement flash_attention (tiled, online softmax, no N×N matrix)
@@ -56,7 +58,7 @@
 // TODO: compare kernel time and (via Nsight) HBM bytes read/written
 
 int main() {
-    const int N = 1024;   // sequence length
+    const int N = 1024;  // sequence length
     const int D = HEAD_DIM;
 
     // TODO

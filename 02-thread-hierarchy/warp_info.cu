@@ -24,8 +24,10 @@
 // Build:  cmake --build build --target warp_info
 // Run:    ./build/02-thread-hierarchy/warp_info
 
-#include <cstdio>
 #include <cuda_runtime.h>
+
+#include <cstdio>
+
 #include "../common/cuda_utils.h"
 
 // TODO: implement a kernel that prints lane_id and __activemask() in a branching block

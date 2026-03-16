@@ -15,18 +15,20 @@
 // Build:  cmake --build build --target saxpy
 // Run:    ./build/01-foundations/saxpy
 
+#include <cuda_runtime.h>
+
 #include <cstdio>
 #include <cstdlib>
-#include <cuda_runtime.h>
+
 #include "../common/cuda_utils.h"
 
 // TODO: write the saxpy kernel
 // Signature: __global__ void saxpy(float a, const float* x, float* y, int n)
 
 int main() {
-    const int N        = 1 << 24;
+    const int N = 1 << 24;
     const size_t bytes = N * sizeof(float);
-    const float A      = 2.5f;
+    const float A = 2.5f;
 
     // TODO: full host/device lifecycle (same pattern as vector_add)
     // Reference result: h_ref[i] = A * h_x[i] + h_y[i]

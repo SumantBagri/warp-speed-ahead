@@ -34,9 +34,11 @@
 // Build:  cmake --build build --target matrix_transpose
 // Run:    ./build/04-memory-optimization/matrix_transpose
 
+#include <cuda_runtime.h>
+
 #include <cstdio>
 #include <cstdlib>
-#include <cuda_runtime.h>
+
 #include "../common/cuda_utils.h"
 
 #define TILE 32
@@ -46,7 +48,7 @@
 // TODO: implement transpose_tiled_padded (shared memory, +1 padding)
 
 int main() {
-    const int N = 4096;   // square matrix N×N
+    const int N = 4096;  // square matrix N×N
 
     // TODO: allocate, run all three, verify each against CPU transpose, print timings
 

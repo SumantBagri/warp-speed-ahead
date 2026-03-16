@@ -28,9 +28,11 @@
 // Build:  cmake --build build --target reduce_warp
 // Run:    ./build/06-reductions/reduce_warp
 
+#include <cuda_runtime.h>
+
 #include <cstdio>
 #include <cstdlib>
-#include <cuda_runtime.h>
+
 #include "../common/cuda_utils.h"
 
 // TODO: implement warp_reduce_sum(__shfl_down_sync chain) as a __device__ function

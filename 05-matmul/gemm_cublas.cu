@@ -20,10 +20,12 @@
 // Build:  cmake --build build --target gemm_cublas
 // Run:    ./build/05-matmul/gemm_cublas
 
+#include <cublas_v2.h>
+#include <cuda_runtime.h>
+
 #include <cstdio>
 #include <cstdlib>
-#include <cuda_runtime.h>
-#include <cublas_v2.h>
+
 #include "../common/cuda_utils.h"
 
 // No kernel to write here — the exercise is understanding the cuBLAS API

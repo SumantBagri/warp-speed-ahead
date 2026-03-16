@@ -28,16 +28,18 @@
 // Build:  cmake --build build --target prefix_scan
 // Run:    ./build/06-reductions/prefix_scan
 
+#include <cuda_runtime.h>
+
 #include <cstdio>
 #include <cstdlib>
-#include <cuda_runtime.h>
+
 #include "../common/cuda_utils.h"
 
 // TODO: implement hillis_steele_scan kernel (single block, N ≤ 1024)
 // TODO: verify against CPU prefix sum
 
 int main() {
-    const int N = 1024;   // start small: single block
+    const int N = 1024;  // start small: single block
 
     // TODO: run scan, verify, print result for first 16 elements
 

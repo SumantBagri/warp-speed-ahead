@@ -28,9 +28,11 @@
 // Build:  cmake --build build --target reduce_naive
 // Run:    ./build/06-reductions/reduce_naive
 
+#include <cuda_runtime.h>
+
 #include <cstdio>
 #include <cstdlib>
-#include <cuda_runtime.h>
+
 #include "../common/cuda_utils.h"
 
 // TODO: implement reduce_naive kernel (one block → one partial sum in result[blockIdx.x])

@@ -24,15 +24,17 @@
 // Build:  cmake --build build --target grid_stride
 // Run:    ./build/02-thread-hierarchy/grid_stride
 
+#include <cuda_runtime.h>
+
 #include <cstdio>
 #include <cstdlib>
-#include <cuda_runtime.h>
+
 #include "../common/cuda_utils.h"
 
 // TODO: implement vector_add_stride using a grid-stride loop
 
 int main() {
-    const int N        = 1 << 24;
+    const int N = 1 << 24;
     const size_t bytes = N * sizeof(float);
 
     // TODO: standard host/device lifecycle

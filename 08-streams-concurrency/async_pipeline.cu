@@ -28,13 +28,15 @@
 // Build:  cmake --build build --target async_pipeline
 // Run:    ./build/08-streams-concurrency/async_pipeline
 
+#include <cuda_runtime.h>
+
 #include <cstdio>
 #include <cstdlib>
-#include <cuda_runtime.h>
+
 #include "../common/cuda_utils.h"
 
 #define N_STREAMS 2
-#define CHUNKS    8
+#define CHUNKS 8
 
 // TODO: implement the compute kernel (e.g., multiply each element by 3)
 // TODO: implement sequential version (baseline)
@@ -42,7 +44,7 @@
 // Note: use cudaMallocHost for host memory (pinned, required for async)
 
 int main() {
-    const int N        = 1 << 24;
+    const int N = 1 << 24;
     const size_t bytes = N * sizeof(float);
 
     // TODO: run both versions, compare timing

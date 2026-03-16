@@ -25,9 +25,11 @@
 // Exercise C (if multi-GPU available):
 //   Actual P2P: copy data from device 0 to device 1, process, copy back.
 
+#include <cuda_runtime.h>
+
 #include <cstdio>
 #include <cstdlib>
-#include <cuda_runtime.h>
+
 #include "../common/cuda_utils.h"
 
 // TODO: Exercise A — peer access matrix

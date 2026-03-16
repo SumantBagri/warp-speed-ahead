@@ -31,9 +31,11 @@
 // Build:  cmake --build build --target coop_groups
 // Run:    ./build/07-warp-programming/coop_groups
 
-#include <cstdio>
-#include <cuda_runtime.h>
 #include <cooperative_groups.h>
+#include <cuda_runtime.h>
+
+#include <cstdio>
+
 #include "../common/cuda_utils.h"
 
 namespace cg = cooperative_groups;

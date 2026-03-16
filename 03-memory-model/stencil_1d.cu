@@ -27,9 +27,11 @@
 // Build:  cmake --build build --target stencil_1d
 // Run:    ./build/03-memory-model/stencil_1d
 
+#include <cuda_runtime.h>
+
 #include <cstdio>
 #include <cstdlib>
-#include <cuda_runtime.h>
+
 #include "../common/cuda_utils.h"
 
 #define RADIUS 4

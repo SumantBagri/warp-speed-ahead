@@ -27,9 +27,11 @@
 // Build:  cmake --build build --target streams_basic
 // Run:    ./build/08-streams-concurrency/streams_basic
 
+#include <cuda_runtime.h>
+
 #include <cstdio>
 #include <cstdlib>
-#include <cuda_runtime.h>
+
 #include "../common/cuda_utils.h"
 
 // TODO: implement a simple kernel to time (e.g., vector scale: out[i] = in[i] * 2)

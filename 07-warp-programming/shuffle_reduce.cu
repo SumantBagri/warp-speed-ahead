@@ -29,8 +29,10 @@
 // Build:  cmake --build build --target shuffle_reduce
 // Run:    ./build/07-warp-programming/shuffle_reduce
 
-#include <cstdio>
 #include <cuda_runtime.h>
+
+#include <cstdio>
+
 #include "../common/cuda_utils.h"
 
 // TODO: implement kernel_A (broadcast), kernel_B (prefix sum), kernel_C (butterfly reduce)

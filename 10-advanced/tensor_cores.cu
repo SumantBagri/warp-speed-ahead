@@ -21,11 +21,13 @@
 // Note: each warp handles one 16×16 output tile.
 //       Block layout: tile the output matrix with one warp per 16×16 output tile.
 
+#include <cuda_fp16.h>
+#include <cuda_runtime.h>
+#include <mma.h>
+
 #include <cstdio>
 #include <cstdlib>
-#include <cuda_runtime.h>
-#include <cuda_fp16.h>
-#include <mma.h>
+
 #include "../common/cuda_utils.h"
 
 using namespace nvcuda::wmma;

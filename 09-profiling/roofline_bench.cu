@@ -31,10 +31,12 @@
 // Build:  cmake --build build --target roofline_bench
 // Run:    ./build/09-profiling/roofline_bench
 
-#include <cstdio>
-#include <cstdlib>
 #include <cuda_runtime.h>
 #include <nvtx3/nvToolsExt.h>
+
+#include <cstdio>
+#include <cstdlib>
+
 #include "../common/cuda_utils.h"
 
 // TODO: implement each kernel listed above (or reuse from earlier modules)

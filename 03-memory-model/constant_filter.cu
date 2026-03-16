@@ -23,9 +23,11 @@
 // Build:  cmake --build build --target constant_filter
 // Run:    ./build/03-memory-model/constant_filter
 
+#include <cuda_runtime.h>
+
 #include <cstdio>
 #include <cstdlib>
-#include <cuda_runtime.h>
+
 #include "../common/cuda_utils.h"
 
 #define FILTER_SIZE 17

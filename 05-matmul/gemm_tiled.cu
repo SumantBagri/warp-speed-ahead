@@ -8,7 +8,8 @@
 //     into shared memory, then compute their portion of the dot product
 //   - Two __syncthreads() per tile iteration:
 //       1st: after loading  — ensure all data is in smem before any thread reads it
-//       2nd: after compute  — ensure all threads are done reading before the next tile overwrites smem
+//       2nd: after compute  — ensure all threads are done reading before the next tile overwrites
+//       smem
 //
 // Tile iteration pseudocode:
 //   for t in [0, ceil(K/TILE)):
@@ -25,9 +26,11 @@
 // Build:  cmake --build build --target gemm_tiled
 // Run:    ./build/05-matmul/gemm_tiled
 
+#include <cuda_runtime.h>
+
 #include <cstdio>
 #include <cstdlib>
-#include <cuda_runtime.h>
+
 #include "../common/cuda_utils.h"
 
 #define TILE 32

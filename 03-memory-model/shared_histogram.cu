@@ -30,9 +30,11 @@
 // Build:  cmake --build build --target shared_histogram
 // Run:    ./build/03-memory-model/shared_histogram
 
+#include <cuda_runtime.h>
+
 #include <cstdio>
 #include <cstdlib>
-#include <cuda_runtime.h>
+
 #include "../common/cuda_utils.h"
 
 #define BINS 256
