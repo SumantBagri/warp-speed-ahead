@@ -36,7 +36,7 @@
 #include "../common/cuda_utils.h"
 
 // TODO: write the vector_add kernel
-void __global__ vector_add(float* a, float* b, float* c, int n) {
+__global__ void vector_add(const float* a, const float* b, float* c, int n) {
     int tid = blockIdx.x * blockDim.x + threadIdx.x;
     if (tid < n) {
         c[tid] = a[tid] + b[tid];
