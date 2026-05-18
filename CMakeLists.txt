@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.20)
 project(warp-speed-ahead CUDA CXX)
 
-set(CMAKE_CUDA_STANDARD 17)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CUDA_STANDARD 20)
+set(CMAKE_CXX_STANDARD 20)
 
 # RTX 3070 = Ampere = SM 8.6
 # To auto-detect: set(CMAKE_CUDA_ARCHITECTURES native)
