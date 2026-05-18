@@ -42,22 +42,23 @@
 // TODO: implement histogram kernel using shared memory
 // Signature: __global__ void histogram(const int* data, int* hist, int n)
 __global__ void histogram(const int* data, int* hist, int n) {
-    int tid = blockIdx.x * blockDim.x + threadIdx.x;
-    if (threadIdx.x > BINS || tid > n)
-        return;
-
     __shared__ int smem[BINS];
 
-    // zero out shared hist
-    smem[threadIdx.x] = 0;
+    // Zero shared histogram — loop handles blockDim.x != BINS
+    for (int b = threadIdx.x; b < BINS; b += blockDim.x)
+        smem[b] = 0;
     __syncthreads();
 
-    // atomically add to shared hist
-    atomicAdd(&smem[data[tid]], 1);
+    // Grid-stride loop: each thread processes multiple elements, spreading
+    // atomic contention across more iterations and hiding global-load latency
+    // by keeping more warps in flight.
+    for (int i = blockIdx.x * blockDim.x + threadIdx.x; i < n; i += blockDim.x * gridDim.x)
+        atomicAdd(&smem[data[i]], 1);
     __syncthreads();
 
-    // write to global hist
-    atomicAdd(&hist[threadIdx.x], smem[threadIdx.x]);
+    // Flush shared → global
+    for (int b = threadIdx.x; b < BINS; b += blockDim.x)
+        atomicAdd(&hist[b], smem[b]);
 }
 
 int main() {
@@ -76,8 +77,8 @@ int main() {
     CUDA_CHECK(cudaMemset(d_hist, 0, hist_bytes));
     CUDA_CHECK(cudaMemcpy(d_data, h_data, data_bytes, cudaMemcpyHostToDevice));
 
-    const int BLOCK = BINS;
-    const int GRID = (N + BLOCK - 1) / BLOCK;
+    const int BLOCK = 1024;
+    const int GRID = ((N + BLOCK - 1) / BLOCK < 4096) ? (N + BLOCK - 1) / BLOCK : 4096;
     histogram<<<GRID, BLOCK>>>(d_data, d_hist, N);
     CUDA_CHECK(cudaDeviceSynchronize());
 
