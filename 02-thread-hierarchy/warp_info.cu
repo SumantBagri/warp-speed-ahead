@@ -31,11 +31,83 @@
 #include "../common/cuda_utils.h"
 
 // TODO: implement a kernel that prints lane_id and __activemask() in a branching block
-// TODO: implement divergent_kernel and uniform_kernel for timing comparison
+__global__ void print_lane_id() {
+    int lane_id = threadIdx.x & (warpSize - 1);
+
+    if (lane_id < 16) {
+        printf("lane id: %d | active mask: 0x%08x\n", lane_id, __activemask());
+    } else {
+        printf("lane id: %d | active mask: 0x%08x\n", lane_id, __activemask());
+    }
+}
+
+__global__ void divergent_kernel(float* out, long long* clk, int n) {
+    int tid = blockIdx.x * blockDim.x + threadIdx.x;
+    if (tid >= n)
+        return;
+    int lane_id = threadIdx.x & (warpSize - 1);
+
+    long long start = clock64();
+    float val = (float)tid;
+    if (lane_id % 2 == 0) {
+        for (int i = 0; i < 1000; i++) val = val * 1.01f + 0.5f;
+    } else {
+        for (int i = 0; i < 1000; i++) val = val * 0.99f - 0.5f;
+    }
+    out[tid] = val;
+    // lane 0 of block 0 records cycles; warp serialises both branches so
+    // it waits out the odd-lane path too — giving the full divergent cost
+    if (blockIdx.x == 0 && lane_id == 0)
+        *clk = clock64() - start;
+}
+
+__global__ void uniform_kernel(float* out, long long* clk, int n) {
+    int tid = blockIdx.x * blockDim.x + threadIdx.x;
+    if (tid >= n)
+        return;
+    int lane_id = threadIdx.x & (warpSize - 1);
+
+    long long start = clock64();
+    float val = (float)tid;
+    for (int i = 0; i < 1000; i++) val = val * 1.01f + 0.5f;
+    out[tid] = val;
+    if (blockIdx.x == 0 && lane_id == 0)
+        *clk = clock64() - start;
+}
 
 int main() {
     // Exercise A: launch with 1 block of 32 threads, print mask values
+    // print_lane_id<<<1, 32>>>();
+    // CUDA_CHECK(cudaDeviceSynchronize());
+
     // Exercise B: launch with large N, time divergent vs uniform
+    const int N = 1 << 24;
+    const int block = 256;
+    const int grid = (N + block - 1) / block;
+
+    float* d_out;
+    long long *d_clk_div, *d_clk_uni;
+    CUDA_CHECK(cudaMalloc(&d_out, N * sizeof(float)));
+    CUDA_CHECK(cudaMalloc(&d_clk_div, sizeof(long long)));
+    CUDA_CHECK(cudaMalloc(&d_clk_uni, sizeof(long long)));
+
+    divergent_kernel<<<grid, block>>>(d_out, d_clk_div, N);
+    CUDA_CHECK(cudaGetLastError());
+
+    uniform_kernel<<<grid, block>>>(d_out, d_clk_uni, N);
+    CUDA_CHECK(cudaGetLastError());
+
+    long long clk_div, clk_uni;
+    CUDA_CHECK(cudaMemcpy(&clk_div, d_clk_div, sizeof(long long), cudaMemcpyDeviceToHost));
+    CUDA_CHECK(cudaMemcpy(&clk_uni, d_clk_uni, sizeof(long long), cudaMemcpyDeviceToHost));
+
+    printf("\ndivergent_kernel: %lld cycles\n", clk_div);
+    printf("uniform_kernel:   %lld cycles\n", clk_uni);
+    printf("slowdown:         %.2fx\n", (double)clk_div / clk_uni);
+
+    CUDA_CHECK(cudaFree(d_out));
+    CUDA_CHECK(cudaFree(d_clk_div));
+    CUDA_CHECK(cudaFree(d_clk_uni));
 
     return 0;
 }
