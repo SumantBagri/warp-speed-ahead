@@ -41,11 +41,56 @@
 
 // TODO: implement histogram kernel using shared memory
 // Signature: __global__ void histogram(const int* data, int* hist, int n)
+__global__ void histogram(const int* data, int* hist, int n) {
+    int tid = blockIdx.x * blockDim.x + threadIdx.x;
+    if (threadIdx.x > BINS || tid > n)
+        return;
+
+    __shared__ int smem[BINS];
+
+    // zero out shared hist
+    smem[threadIdx.x] = 0;
+    __syncthreads();
+
+    // atomically add to shared hist
+    atomicAdd(&smem[data[tid]], 1);
+    __syncthreads();
+
+    // write to global hist
+    atomicAdd(&hist[threadIdx.x], smem[threadIdx.x]);
+}
 
 int main() {
     const int N = 1 << 22;
+    const size_t data_bytes = N * sizeof(int);
+    const size_t hist_bytes = BINS * sizeof(int);
 
-    // TODO: generate random input in [0, BINS), run kernel, verify sum == N
+    // Generate random input in [0, BINS)
+    int* h_data = (int*)malloc(data_bytes);
+    for (int i = 0; i < N; i++) h_data[i] = rand() % BINS;
 
+    int* d_data;
+    int* d_hist;
+    CUDA_CHECK(cudaMalloc(&d_data, data_bytes));
+    CUDA_CHECK(cudaMalloc(&d_hist, hist_bytes));
+    CUDA_CHECK(cudaMemset(d_hist, 0, hist_bytes));
+    CUDA_CHECK(cudaMemcpy(d_data, h_data, data_bytes, cudaMemcpyHostToDevice));
+
+    const int BLOCK = BINS;
+    const int GRID = (N + BLOCK - 1) / BLOCK;
+    histogram<<<GRID, BLOCK>>>(d_data, d_hist, N);
+    CUDA_CHECK(cudaDeviceSynchronize());
+
+    int h_hist[BINS];
+    CUDA_CHECK(cudaMemcpy(h_hist, d_hist, hist_bytes, cudaMemcpyDeviceToHost));
+
+    // Verify sum == N
+    long long sum = 0;
+    for (int i = 0; i < BINS; i++) sum += h_hist[i];
+    printf("sum = %lld, N = %d -> %s\n", sum, N, sum == N ? "PASS" : "FAIL");
+
+    free(h_data);
+    CUDA_CHECK(cudaFree(d_data));
+    CUDA_CHECK(cudaFree(d_hist));
     return 0;
 }
