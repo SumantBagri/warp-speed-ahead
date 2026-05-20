@@ -45,8 +45,7 @@ __global__ void histogram(const int* data, int* hist, int n) {
     __shared__ int smem[BINS];
 
     // Zero shared histogram — loop handles blockDim.x != BINS
-    for (int b = threadIdx.x; b < BINS; b += blockDim.x)
-        smem[b] = 0;
+    for (int b = threadIdx.x; b < BINS; b += blockDim.x) smem[b] = 0;
     __syncthreads();
 
     // Grid-stride loop: each thread processes multiple elements, spreading
@@ -57,8 +56,7 @@ __global__ void histogram(const int* data, int* hist, int n) {
     __syncthreads();
 
     // Flush shared → global
-    for (int b = threadIdx.x; b < BINS; b += blockDim.x)
-        atomicAdd(&hist[b], smem[b]);
+    for (int b = threadIdx.x; b < BINS; b += blockDim.x) atomicAdd(&hist[b], smem[b]);
 }
 
 int main() {
