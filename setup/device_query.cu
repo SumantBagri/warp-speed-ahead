@@ -21,6 +21,32 @@
 
 #include "../common/cuda_utils.h"
 
+static int tensor_cores_per_sm(int major, int minor) {
+    switch (major) {
+        case 12:  // Blackwell consumer (5th gen)
+        case 10:  // Blackwell datacenter (5th gen)
+        case 9:   // Hopper (4th gen)
+            return 4;
+        case 8:   // Ampere (3rd gen) / Ada Lovelace (4th gen)
+            switch (minor) {
+                case 0: return 4;
+                case 6: return 4;
+                case 7: return 4;
+                case 9: return 4;
+            }
+            break;
+        case 7:   // Volta (1st gen) / Turing (2nd gen)
+            switch (minor) {
+                case 0: return 8;
+                case 5: return 8;
+            }
+            break;
+        case 6:   // Pascal — no tensor cores
+            return 0;
+    }
+    return -1;
+}
+
 static int cores_per_sm(int major, int minor) {
     switch (major) {
         case 12:  // Blackwell consumer (RTX 50xx)
@@ -84,6 +110,8 @@ int main() {
 
         int cores = cores_per_sm(p.major, p.minor);
         int total_cores = (cores > 0) ? cores * p.multiProcessorCount : -1;
+        int tcores = tensor_cores_per_sm(p.major, p.minor);
+        int total_tcores = (tcores >= 0) ? tcores * p.multiProcessorCount : -1;
         double peak_bw = 2.0 * (p.memoryBusWidth / 8.0) * p.memoryClockRate * 1e3 / 1e9;
         // cores * clock(Hz) * 2 FLOPs/cycle (FMA) / 1e12 → TFLOPS
         double peak_fp32_tflops =
@@ -96,6 +124,8 @@ int main() {
         printf("  SM count:                  %d\n", p.multiProcessorCount);
         printf("  CUDA cores per SM:         %d\n", cores);
         printf("  Total CUDA cores:          %d\n", total_cores);
+        printf("  Tensor cores per SM:       %d\n", tcores);
+        printf("  Total tensor cores:        %d\n", total_tcores);
         printf("  SM clock:                  %.2f GHz\n", p.clockRate / 1e6);
         printf("  Total global memory:       %.2f GB\n", p.totalGlobalMem / 1e9);
         printf("  Memory clock:              %.2f GHz\n", p.memoryClockRate / 1e6);
