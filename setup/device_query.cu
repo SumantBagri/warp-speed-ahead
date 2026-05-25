@@ -23,21 +23,37 @@
 
 static int cores_per_sm(int major, int minor) {
     switch (major) {
-        case 9:
+        case 12:  // Blackwell consumer (RTX 50xx)
             switch (minor) {
                 case 0:
                     return 128;
             }
             break;
-        case 8:
+        case 10:  // Blackwell datacenter (B100/B200/GB200)
             switch (minor) {
                 case 0:
-                    return 64;
+                    return 128;
+            }
+            break;
+        case 9:  // Hopper (H100/H200)
+            switch (minor) {
+                case 0:
+                    return 128;
+            }
+            break;
+        case 8:  // Ampere / Ada Lovelace
+            switch (minor) {
+                case 0:
+                    return 64;  // GA100
                 case 6:
-                    return 128;
+                    return 128;  // GA10x
+                case 7:
+                    return 128;  // Jetson AGX Orin
+                case 9:
+                    return 128;  // Ada Lovelace (RTX 40xx)
             }
             break;
-        case 7:
+        case 7:  // Volta / Turing
             switch (minor) {
                 case 0:
                     return 64;
@@ -45,7 +61,7 @@ static int cores_per_sm(int major, int minor) {
                     return 64;
             }
             break;
-        case 6:
+        case 6:  // Pascal
             switch (minor) {
                 case 0:
                     return 64;
@@ -69,6 +85,9 @@ int main() {
         int cores = cores_per_sm(p.major, p.minor);
         int total_cores = (cores > 0) ? cores * p.multiProcessorCount : -1;
         double peak_bw = 2.0 * (p.memoryBusWidth / 8.0) * p.memoryClockRate * 1e3 / 1e9;
+        // cores * clock(Hz) * 2 FLOPs/cycle (FMA) / 1e12 → TFLOPS
+        double peak_fp32_tflops =
+            (cores > 0) ? (double)total_cores * p.clockRate * 1e3 * 2.0 / 1e12 : -1.0;
 
         printf("========================================\n");
         printf("Device %d:                    %s\n", i, p.name);
@@ -82,6 +101,7 @@ int main() {
         printf("  Memory clock:              %.2f GHz\n", p.memoryClockRate / 1e6);
         printf("  Memory bus width:          %d bits\n", p.memoryBusWidth);
         printf("  Peak memory bandwidth:     %.2f GB/s\n", peak_bw);
+        printf("  Peak FP32 (TFLOPS):        %.2f\n", peak_fp32_tflops);
         printf("  Shared memory per SM:      %zu KB\n", p.sharedMemPerMultiprocessor / 1024);
         printf("  Shared memory per block:   %zu KB\n", p.sharedMemPerBlock / 1024);
         printf("  Registers per SM:          %d\n", p.regsPerMultiprocessor);
